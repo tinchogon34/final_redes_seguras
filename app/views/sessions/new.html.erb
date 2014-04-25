@@ -1,0 +1,7 @@
+<%= provide(:title, "Login Paso 1") %>
+
+<%= form_tag({controller: "sessions", action: "login_step_1"}, method: :post, class: 'form-horizontal' ) do %>
+<%= text_field :user, :username_email, placeholder: "Nombre de usuario / Email", class: "form-control" %><br/>
+<%= password_field :user, :password, placeholder: "Password", class: "form-control" %><br />
+<%= submit_tag "Login", class: "btn btn-primary" %>
+<% end %>

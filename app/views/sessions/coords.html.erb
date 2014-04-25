@@ -1,0 +1,7 @@
+<%= provide(:title, "Login Paso 2") %>
+
+<%= form_tag({controller: "sessions", action: "login_step_2"}, method: :post, class: 'form-horizontal') do %>
+<%= text_field :user, :coord_1_value, placeholder: "Coordenada #{@coord_1_text}", class: "form-control" %><br/>
+<%= text_field :user, :coord_2_value, placeholder: "Coordenada #{@coord_2_text}", class: "form-control" %><br/>
+<%= submit_tag "Enviar", class: "btn btn-primary" %>
+<% end %>

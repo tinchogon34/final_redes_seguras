@@ -1,0 +1,17 @@
+@import "twitter/bootstrap.min";
+
+body {
+  padding-top: 80px;
+}
+
+.flash-message {
+  font-weight: bold;
+  
+  .bg-color-alert {
+    @extend .alert-danger;
+  }
+
+  .bg-color-notice {
+    @extend .alert-success;
+  }
+}
