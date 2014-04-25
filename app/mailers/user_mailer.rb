@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
 
   def confirmation_email(user)
     @user = user
-    @url  = "http://codingways.com.ar/users/confirm?email=#{@user.email}&token=#{@user.confirm_token}"
+    @url  = "http://redes-seguras.codingways.com/users/confirm?email=#{@user.email}&token=#{@user.confirm_token}"
     mail(to: @user.email, subject: 'Confirme su registro')
   end
 end
