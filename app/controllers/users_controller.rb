@@ -31,9 +31,9 @@ class UsersController < ApplicationController
     if user.confirm_token == params[:token]
       user.update_attributes(confirm_token: nil)
       coord_card = CoordCard.generate!(user)
-      csv = coord_card.to_csv(col_sep: "\t", force_quotes: true)
+      time = coord_card.to_xls
       coord_card.encrypt!
-      send_data csv, filename: "coordenadas.xls", type: :xls      
+      send_file "#{Rails.root}/tmp/#{time}.xlsx", filename: "coordenadas.xlsx", type: :xls
     end
   end
 

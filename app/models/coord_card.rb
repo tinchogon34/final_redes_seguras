@@ -28,6 +28,26 @@ class CoordCard < ActiveRecord::Base
     end
   end
 
+  def to_xls
+    types = [:string] * (COLS.size + 1)
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Hoja1") do |sheet|
+
+        sheet.add_row([""] + COLS)
+        ROWS.each do |row|
+          arr = [row]
+          COLS.each do |col|
+            arr << coord_card_items.where(coord: col+row).first.value 
+          end
+          sheet.add_row arr, types: types
+        end
+      end
+      time = Time.now.to_i
+      p.serialize("#{Rails.root}/tmp/#{time}.xlsx")
+      return time
+    end
+  end
+
   def self.rand_coord
     COLS.sample + ROWS.sample
   end
