@@ -11,17 +11,18 @@
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <% if signed_in? %>
-        <ul class="nav navbar-nav">
-          <li><%= link_to "Login", users_sign_in_path %></li>
-        </ul>      
+      <% if signed_in? %>     
         <ul class="nav navbar-nav navbar-right">
           <li><%= link_to "Salir", users_sign_out_path, method: :delete %></li>
         </ul>
-      <% end %>
-      <ul class="nav navbar-nav">
+      <% else %>
+        <ul class="nav navbar-nav">
+          <li><%= link_to "Login", users_sign_in_path %></li>
+        </ul> 
+        <ul class="nav navbar-nav">
           <li><%= link_to "Registrarse", users_new_path %></li>
-      </ul>
+        </ul>
+      <% end %>      
     </div>
   </div>
 </nav>
