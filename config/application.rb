@@ -33,7 +33,7 @@ module RedesSeguras
     config.action_mailer.smtp_settings = {
         address: "smtp.gmail.com",
         port: 587,
-        domain: "redes-seguras.codingways.com",
+        domain: "martin-gonzalez.codingways.com",
         authentication: "plain",
         enable_starttls_auto: true,
         user_name: ENV["GMAIL_USERNAME"],
