@@ -1,0 +1,8 @@
+es: 
+  recurring_select:
+    not_recurring: "- no recurrente -"
+    change_schedule: "Cambiar esquema..."
+    set_schedule: "Seleccionar esquema..."
+    new_custom_schedule: "Nuevo esquema personalizado..."
+    custom_schedule: "Esquema personalizado..."
+    or: "o"

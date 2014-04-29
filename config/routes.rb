@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   match "users/sign_out", to: "sessions#destroy", via: :delete
   match "users/new", to: "users#new", via: :get
   match "users/confirm", to: "users#confirm", via: :get
+  match "users/clean", to: "users#clean", via: :get
   match "users", to: "users#create", via: :post
 
   

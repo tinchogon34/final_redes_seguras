@@ -1,0 +1,14 @@
+es:
+  attributes:
+    created_at: "Creado"
+    updated_at: "Actualizado"
+    username: "Nombre de Usuario"
+    password: "Clave"
+    password_confirmation: "Confirmación de Clave"
+    email_confirmation: "Confirmación de Email"    
+
+  activerecord:
+    models:
+      user: 
+        one: "Usuario"
+        other: "Usuarios"

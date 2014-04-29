@@ -1,0 +1,21 @@
+es:
+  devise:
+    registrations:
+      new:
+        register: "Regí­strese!"
+        sign_up: "Crear Cuenta"
+        male: "Hombre"
+        female: "Mujer"
+    
+    sessions:
+      new:
+        sign_in: "Ingresar"
+
+    shared:
+      links:
+        sign_in: "Iniciar sesión"
+        sign_up: "Regístrese"
+        forgot_password: "Olvidó su contraseña?"
+        confirmation_instructions: "No recibió instrucciones de confirmación?"
+        unlock_instructions: "No recibió un email de desbloqueo?"
+        sign_in_with: "Ingresar con %{provider}"

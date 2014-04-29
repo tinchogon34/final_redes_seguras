@@ -37,9 +37,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def clean
+    User.destroy_all
+    flash[:notice] = "Usuarios eliminados exitosamente!"
+    redirect_to users_sign_in_path
+  end
+
   private
 
   def user_params
-      params.require(:user).permit(:username, :email, :password, :password_confirmation)
+      params.require(:user).permit(:username, :email, :email_confirmation, :password, :password_confirmation)
   end  
 end

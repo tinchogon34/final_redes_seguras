@@ -1,6 +1,9 @@
+<%= provide(:title, "Registro") %>
+
 <%= simple_form_for(@user, html: {class: 'form-horizontal' }) do |f| %>
 <%= f.input :username, input_html: { class: "form-control"} %>
 <%= f.input :email, input_html: { class: "form-control"} %>
+<%= f.input :email_confirmation, input_html: { class: "form-control"} %>
 <%= f.input :password, as: :password, input_html: { class: "form-control"} %>
 <%= f.input :password_confirmation, as: :password, input_html: { class: "form-control"} %>
 <br />
