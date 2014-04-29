@@ -17,9 +17,8 @@ class CoordCard < ActiveRecord::Base
 
   def to_csv(options = {})
     CSV.generate(options) do |csv|
-      csv << [""] + COLS
       ROWS.each do |row|
-        arr = [row]
+        arr = []
         COLS.each do |col|
           arr << coord_card_items.where(coord: col+row).first.value 
         end
