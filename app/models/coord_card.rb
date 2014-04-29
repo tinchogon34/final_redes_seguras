@@ -28,13 +28,11 @@ class CoordCard < ActiveRecord::Base
   end
 
   def to_xls
-    types = [:string] * (COLS.size + 1)
+    types = [:string] * (COLS.size)
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "Hoja1") do |sheet|
-
-        sheet.add_row([""] + COLS)
+      p.workbook.add_worksheet(:name => "Hoja1") do |sheet|        
         ROWS.each do |row|
-          arr = [row]
+          arr = []
           COLS.each do |col|
             arr << coord_card_items.where(coord: col+row).first.value 
           end
