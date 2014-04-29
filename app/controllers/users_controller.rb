@@ -9,6 +9,10 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    old_user = User.find_by(email: @user.email)
+    if old_user and old_user.confirm_token and (Time.now > (old_user.created_at + 30.minutes))
+      old_user.destroy
+    end
     if @user.save
       @user.update_attributes(confirm_token: (Digest::SHA2.new << (@user.email + Time.now.to_s)).to_s)
       UserMailer.confirmation_email(@user).deliver
@@ -24,7 +28,8 @@ class UsersController < ApplicationController
     return redirect_to users_sign_in_path if user.nil? or params[:token].nil? or user.confirmed?
 
     if Time.now > (user.created_at + 30.minutes)
-      flash[:alert] = "El token ha expirado"
+      user.destroy
+      flash[:alert] = "El token ha expirado, vuelva a registrarse"
       return redirect_to users_sign_in_path
     end
 

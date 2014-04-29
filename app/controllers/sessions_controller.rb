@@ -31,6 +31,11 @@ class SessionsController < ApplicationController
   def login_step_1
     user = User.where("username = :username_email OR email = :username_email",username_email: params[:user][:username_email]).first
 
+    if user and user.confirm_token
+      flash[:alert] = "Esperando confirmación de correo"
+      return redirect_to users_sign_in_path  
+    end
+
     if user and user.valid_password? params[:user][:password]
       flash[:one_time_coords] = true # Variable que dura 1 sola sesion para prevenir el refresco de coordenadas en la pagina /coords
       session[:step1_user] = user.id # Indica un login exitoso y al mismo tiempo guarda el usuario para poder traer los valores de las coordenadas aleatorias
@@ -47,7 +52,7 @@ class SessionsController < ApplicationController
     user = User.find(session[:step1_user])
 
     if Time.now > (user.last_login_at + 1.minute)
-      flash[:alert] = "La solicitud ha expirado"
+      flash[:alert] = "La solicitud ha expirado, vuelva a ingresar"
       return redirect_to users_sign_in_path  
     end
     
