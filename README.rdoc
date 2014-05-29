@@ -1,28 +1,31 @@
-== README
+== Trabajo Final de Redes Seguras
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+La implementación de un mecanismo de Autenticación de Doble Factor implica que un usuario para autenticarse deberá usar 2 de las siguientes posibilidades: 
 
-Things you may want to cover:
+* Ingresar algo que sabe (generalmente usuario y password)
+* Ingresar algún tipo de dato que provenga o le sea enviado a algo que el usuario posea (celular, tarjeta de coordenadas, generador de tokens, etc.)
+* Ingresar algo que el usuario es (lector de huellas, lector óptico)
 
-* Ruby version
+En este caso, se hace uso de el mecanismo llamado Tarjeta de Coordenadas que se usa mucho en algunas entidades bancarias para operar tanto en el cajero como en el Home Banking. Este proceso es obligatorio, no dejando opción al usuario a evitar el doble factor.
 
-* System dependencies
+Las tarjetas de coordenadas son únicas para cada usuario y se encuentran encriptadas al igual que la clave para hacer más difícil su lectura en un caso de robo o acceso no permitido a la base de datos.
 
-* Configuration
+El primer paso para que el usuario obtenga su tarjeta de coordenadas será registrarse, donde se generará un email que será enviado a su casilla de correo que deberá validarse dentro del lapso de los 30 minutos. Cuando el usuario haga click en el enlace enviado por email estará validando su cuenta de usuario al mismo tiempo que se le generará una tarjeta de coordenadas única para él.           
 
-* Database creation
+El algoritmo para obtener las tarjetas de coordenadas es generar X * Y coordenadas aleatorias, donde X son las filas e Y las columnas, y donde sus valores están entre 00 y 99.
+Una vez generada la tarjeta de coordenadas, es brindada al usuario mediante un archivo .xls que no se podrá obtener nuevamente
+        
+Finalmente se encripta cada coordenada haciendo un Digest SHA-256 del valor resultante de la concatenación de: 
 
-* Database initialization
+* El valor de la coordenada
+* La clave del usuario ya encriptada con SHA-256
+* El nombre de usuario único
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Todo este proceso y esta forma de encriptación fue elegida para proteger la información en caso de un acceso no deseado a la base de datos.
+       
+Aparte, al concatenar al valor de cada coordenada la clave del usuario ya encriptada y el nombre de usuario, y luego encriptar de vuelta, nos da un nivel más de seguridad ya que la coordenada encriptada de un usuario que el valor es por ejemplo 90 no será necesariamente igual a la coordenada encriptada de otro usuario donde el valor también sea 90. Esto le dificulta a un usuario que tenga tarjeta de coordenadas y sepa sus respectivos hash, comparar estos con los de otros usuarios y obtener así algunas coordenadas.
+    
+Luego de ya haberse registrado exitosamente, y con la tarjeta de coordenadas digitalizada o impresa, el usuario podrá ingresar al sistema.
+Para ello deberá ingresar su usuario y contraseña y luego completar 2 coordenadas que el sistema le pedirá, las cuales han sido generadas aleatoriamente y son válidas por sólo una sesión. 
+        
+El sistema chequea que las coordenadas sean válidas comparando lo que el usuario ingresó para cada coordenada con el hash resultante de aplicar el mismo algoritmo que se aplicó para guardar las coordenadas. Si el usuario ingresa mal las coordenadas, refresca la página, o se demora más de un minuto en ingresarlas, será redirigido nuevamente a la pantalla para iniciar la autenticación nuevamente.
