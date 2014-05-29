@@ -1,92 +1,68 @@
 <%= provide(:title, "Home") %>
 
-<div class="row">
-  <div class="col-xs-2">
-  </div>
-  <div class="col-xs-8">
-    <h1>Implementación Autenticación Doble Factor</h1>
-    <a href="https://github.com/tinchogon34/final_redes_seguras" class="btn btn-info">Ver en GitHub</a>
-    <h2>Introducción</h2>
-    <div class="well">
-      <p>
-        La implementación de un mecanismo de Autenticación de Doble Factor implica que un usuario para autenticarse deberá usar 2 de las siguientes posibilidades: 
-      </p>    
-      <ul>
-        <li>Ingresar algo que sabe (generalmente usuario y password)</li>
-        <li>Ingresar algún tipo de dato que provenga o le sea enviado a algo que el usuario posea (celular, tarjeta de coordenadas, generador de tokens, etc.)</li>
-        <li>Ingresar algo que el usuario es (lector de huellas, lector óptico)</li>
-      </ul>
-    </div>
-    <h2>Aplicación</h2>
-    <div class="well">
-      <p>
-        En este caso, se hace uso de el mecanismo llamado <b>Tarjeta de Coordenadas</b> que se usa mucho en algunas entidades bancarias para operar tanto en el cajero como en el Home Banking. Este proceso es obligatorio, no dejando opción al usuario a evitar el doble factor.
-        <br />
-        Las tarjetas de coordenadas son únicas para cada usuario y se encuentran encriptadas al igual que la clave para hacer más difícil su lectura en un caso de robo o acceso no permitido a la base de datos.
-      </p>
-      <p>
-        El primer paso para que el usuario obtenga su tarjeta de coordenadas será registrarse, donde se generará un email que será enviado a su casilla de correo que deberá validarse dentro del lapso de los 30 minutos. Cuando el usuario haga click en el enlace enviado por email estará validando su cuenta de usuario al mismo tiempo que se le generará una tarjeta de coordenadas única para él.   
-        <p style="text-align: center;">
-          <%= image_tag 'email.png', style: "border: 1px solid lightgrey;" %>
-        </p>             
-      </p>
 
-      <p>El algoritmo para obtener las tarjetas de coordenadas es generar X * Y coordenadas aleatorias, donde X son las filas e Y las columnas, y donde sus valores están entre 00 y 99.<br />
-        Una vez generada la tarjeta de coordenadas, es brindada al usuario mediante un archivo .xls que no se podrá obtener nuevamente
-        <p style="text-align: center;">
-          <%= image_tag 'coords.png', style: "border: 1px solid lightgrey;" %>
-        </p>
-        Finalmente se encripta cada coordenada haciendo un Digest SHA-256 del valor resultante de la concatenación de: 
-        <ul>
-          <li>El valor de la coordenada</li>
-          <li>La clave del usuario ya encriptada con SHA-256</li>
-          <li>El nombre de usuario único</li>
-        </ul>
-        <p style="text-align: center;">
-          <%= image_tag 'encrypt.png', style: "border: 1px solid lightgrey;" %>
-        </p>
-        Todo este proceso y esta forma de encriptación fue elegida para proteger la información en caso de un acceso no deseado a la base de datos.
-        <br />
-        Aparte, al concatenar al valor de cada coordenada la clave del usuario ya encriptada y el nombre de usuario, y luego encriptar de vuelta, nos da un nivel más de seguridad ya que la coordenada encriptada de un usuario que el valor es por ejemplo 90 no será necesariamente igual a la coordenada encriptada de otro usuario donde el valor también sea 90. Esto le dificulta a un usuario que tenga tarjeta de coordenadas y sepa sus respectivos hash, comparar estos con los de otros usuarios y obtener así algunas coordenadas.
-      </p>
-      <p>
-        Luego de ya haberse registrado exitosamente, y con la tarjeta de coordenadas digitalizada o impresa, el usuario podrá ingresar al sistema. <br />
-        Para ello deberá ingresar su usuario y contraseña y luego completar 2 coordenadas que el sistema le pedirá, las cuales han sido generadas aleatoriamente y son válidas por sólo una sesión. 
-        <p style="text-align: center;">
-          <%= image_tag 'login1.png', style: "border: 1px solid lightgrey;" %>
-        </p>
-        <p style="text-align: center;">
-          <%= image_tag 'login2.png', style: "border: 1px solid lightgrey;" %>
-        </p>
-        El sistema chequea que las coordenadas sean válidas comparando lo que el usuario ingresó para cada coordenada con el hash resultante de aplicar el mismo algoritmo que se aplicó para guardar las coordenadas. Si el usuario ingresa mal las coordenadas, refresca la página, o se demora más de un minuto en ingresarlas, será redirigido nuevamente a la pantalla para iniciar la autenticación nuevamente.
-        <p style="text-align: center;">
-          <%= image_tag 'step2.png', style: "border: 1px solid lightgrey;" %>
-        </p>
-      </p>
+<h1>Implementación Autenticación Doble Factor</h1>
+<a href="https://github.com/tinchogon34/final_redes_seguras" class="btn btn-info">Ver en GitHub</a>
+<h2>Introducción</h2>
+<div class="well">
+  <p>
+    La implementación de un mecanismo de Autenticación de Doble Factor implica que un usuario para autenticarse deberá usar 2 de las siguientes posibilidades: 
+  </p>    
+  <ul>
+    <li>Ingresar algo que sabe (generalmente usuario y password)</li>
+    <li>Ingresar algún tipo de dato que provenga o le sea enviado a algo que el usuario posea (celular, tarjeta de coordenadas, generador de tokens, etc.)</li>
+    <li>Ingresar algo que el usuario es (lector de huellas, lector óptico)</li>
+  </ul>
+</div>
+<h2>Aplicación</h2>
+<div class="well">
+  <p>
+    En este caso, se hace uso de el mecanismo llamado <b>Tarjeta de Coordenadas</b> que se usa mucho en algunas entidades bancarias para operar tanto en el cajero como en el Home Banking. Este proceso es obligatorio, no dejando opción al usuario a evitar el doble factor.
+    <br />
+    Las tarjetas de coordenadas son únicas para cada usuario y se encuentran encriptadas al igual que la clave para hacer más difícil su lectura en un caso de robo o acceso no permitido a la base de datos.
+  </p>
+  <p>
+    El primer paso para que el usuario obtenga su tarjeta de coordenadas será registrarse, donde se generará un email que será enviado a su casilla de correo que deberá validarse dentro del lapso de los 30 minutos. Cuando el usuario haga click en el enlace enviado por email estará validando su cuenta de usuario al mismo tiempo que se le generará una tarjeta de coordenadas única para él.   
+    <p style="text-align: center;">
+      <%= image_tag 'email.png', style: "border: 1px solid lightgrey;" %>
+    </p>             
+  </p>
 
-      <p>
-        <b>En caso de necesitar borrar los usuarios para poder probar la aplicación nuevamente entrar a </b>
-        <a href="https://martin-gonzalez.codingways.com/users/clean">https://martin-gonzalez.codingways.com/users/clean</a>
-      </p>
-      
-      
-    </div>
-    <hr />
-    <div id="footer" class="footer">
-      <div class="media">
-        <a class="pull-left" href="#">
-          <!-- <img class="media-object" src="" alt="..."> -->
-          <%= image_tag 'logotipo_um.jpg', class: 'media-object' %></a>
-          <div class="media-body">
-            <h5 class="media-heading">Universidad de Mendoza | Facultad de Ingeniería</h5>
-            <b>Cátedra de Comunicaciones de Redes Seguras</b><br>
-            <i>Implementación de Autenticación de Doble Factor</i><br>
-            Martín González. <i>leg. 5256</i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-2">
+  <p>El algoritmo para obtener las tarjetas de coordenadas es generar X * Y coordenadas aleatorias, donde X son las filas e Y las columnas, y donde sus valores están entre 00 y 99.<br />
+    Una vez generada la tarjeta de coordenadas, es brindada al usuario mediante un archivo .xls que no se podrá obtener nuevamente
+    <p style="text-align: center;">
+      <%= image_tag 'coords.png', style: "border: 1px solid lightgrey;" %>
+    </p>
+    Finalmente se encripta cada coordenada haciendo un Digest SHA-256 del valor resultante de la concatenación de: 
+    <ul>
+      <li>El valor de la coordenada</li>
+      <li>La clave del usuario ya encriptada con SHA-256</li>
+      <li>El nombre de usuario único</li>
+    </ul>
+    <p style="text-align: center;">
+      <%= image_tag 'encrypt.png', style: "border: 1px solid lightgrey;" %>
+    </p>
+    Todo este proceso y esta forma de encriptación fue elegida para proteger la información en caso de un acceso no deseado a la base de datos.
+    <br />
+    Aparte, al concatenar al valor de cada coordenada la clave del usuario ya encriptada y el nombre de usuario, y luego encriptar de vuelta, nos da un nivel más de seguridad ya que la coordenada encriptada de un usuario que el valor es por ejemplo 90 no será necesariamente igual a la coordenada encriptada de otro usuario donde el valor también sea 90. Esto le dificulta a un usuario que tenga tarjeta de coordenadas y sepa sus respectivos hash, comparar estos con los de otros usuarios y obtener así algunas coordenadas.
+  </p>
+  <p>
+    Luego de ya haberse registrado exitosamente, y con la tarjeta de coordenadas digitalizada o impresa, el usuario podrá ingresar al sistema. <br />
+    Para ello deberá ingresar su usuario y contraseña y luego completar 2 coordenadas que el sistema le pedirá, las cuales han sido generadas aleatoriamente y son válidas por sólo una sesión. 
+    <p style="text-align: center;">
+      <%= image_tag 'login1.png', style: "border: 1px solid lightgrey;" %>
+    </p>
+    <p style="text-align: center;">
+      <%= image_tag 'login2.png', style: "border: 1px solid lightgrey;" %>
+    </p>
+    El sistema chequea que las coordenadas sean válidas comparando lo que el usuario ingresó para cada coordenada con el hash resultante de aplicar el mismo algoritmo que se aplicó para guardar las coordenadas. Si el usuario ingresa mal las coordenadas, refresca la página, o se demora más de un minuto en ingresarlas, será redirigido nuevamente a la pantalla para iniciar la autenticación nuevamente.
+    <p style="text-align: center;">
+      <%= image_tag 'step2.png', style: "border: 1px solid lightgrey;" %>
+    </p>
+  </p>
 
-    </div>
-  </div>
+  <p>
+    <b>En caso de necesitar borrar los usuarios para poder probar la aplicación nuevamente entrar a </b>
+    <a href="https://martin-gonzalez.codingways.com/users/clean">https://martin-gonzalez.codingways.com/users/clean</a>
+  </p>
+</div>
