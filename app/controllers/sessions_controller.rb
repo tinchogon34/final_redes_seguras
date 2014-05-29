@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
     user = User.where("username = :username_email OR email = :username_email",username_email: params[:user][:username_email]).first
 
     if user and user.confirm_token
-      flash[:alert] = "Esperando confirmación de correo"
+      flash[:alert] = "Esperando confirmacion de correo"
       return redirect_to users_sign_in_path  
     end
 
@@ -56,7 +56,12 @@ class SessionsController < ApplicationController
       return redirect_to users_sign_in_path  
     end
     
-    if session[:coord_1_value] == (Digest::SHA2.new << (params[:user][:coord_1_value] + user.encrypted_password)).to_s and (Digest::SHA2.new << (params[:user][:coord_2_value] + user.encrypted_password)).to_s
+    if session[:coord_1_value] == (Digest::SHA2.new << (
+        params[:user][:coord_1_value] + user.encrypted_password + user.username)
+      ).to_s and (Digest::SHA2.new << (
+        params[:user][:coord_2_value] + user.encrypted_password + user.username)
+      ).to_s
+
       session[:current_user_id],session[:step1_user] = session[:step1_user], nil
       session[:coord_1_value] = session[:coord_2_value] = nil
       flash[:notice] = "Logeado con exito"

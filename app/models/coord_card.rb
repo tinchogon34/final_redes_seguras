@@ -11,7 +11,10 @@ class CoordCard < ActiveRecord::Base
 
   def encrypt!
     coord_card_items.each do |coord_card_item|
-      coord_card_item.update_attributes value: (Digest::SHA2.new << (coord_card_item.value + coord_card_item.coord_card.user.encrypted_password)).to_s
+      coord_card_item.update_attributes value: (Digest::SHA2.new << (
+        coord_card_item.value + 
+        coord_card_item.coord_card.user.encrypted_password + 
+        coord_card_item.coord_card.user.username)).to_s
     end    
   end
 
